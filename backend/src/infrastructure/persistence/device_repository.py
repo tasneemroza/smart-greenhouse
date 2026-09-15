@@ -9,7 +9,7 @@ class DeviceRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def save(self, sensor: Sensor) -> Sensor:
+    def save_sensor(self, sensor: Sensor) -> Sensor:
         device = DeviceRow(
             device_type=sensor.device_type,
             role="sensor",

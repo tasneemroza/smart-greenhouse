@@ -2,60 +2,28 @@ import { useEffect, useState } from "react";
 
 import {
   createSensor,
-  getSensors,
-  type Sensor,
+  fetchSensors,
+  type SensorDto,
 } from "../../services/api";
 
-
 export default function SensorList() {
-  const [sensors, setSensors] = useState<Sensor[]>([]);
+  const [sensors, setSensors] = useState<SensorDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [creating, setCreating] = useState("");
 
   async function loadSensors() {
     try {
       setLoading(true);
       setError("");
 
-      const data = await getSensors();
+      const data = await fetchSensors();
       setSensors(data);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to load sensors",
+        err instanceof Error ? err.message : "Failed to load sensors",
       );
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function addSensor(type: "moisture" | "light") {
-    try {
-      setCreating(type);
-      setError("");
-
-      const sensor = await createSensor({
-        type,
-        display_name:
-          type === "moisture"
-            ? "Greenhouse Moisture Sensor"
-            : "Greenhouse Light Sensor",
-      });
-
-      setSensors((currentSensors) => [
-        sensor,
-        ...currentSensors,
-      ]);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to create sensor",
-      );
-    } finally {
-      setCreating("");
     }
   }
 
@@ -63,100 +31,86 @@ export default function SensorList() {
     loadSensors();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="rounded-lg bg-white p-6 shadow">
-        <p className="text-gray-500">Loading sensors...</p>
-      </div>
-    );
+  async function handleCreateSensor(type: string) {
+    try {
+      setError("");
+
+      const displayName =
+        type === "moisture"
+          ? "Soil moisture sensor"
+          : "Greenhouse light sensor";
+
+      const newSensor = await createSensor(type, displayName);
+
+      setSensors((current) => [newSensor, ...current]);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to create sensor",
+      );
+    }
   }
 
   return (
-    <section className="rounded-lg bg-white p-6 shadow">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-semibold text-gray-700">
-            Sensors
-          </h2>
+    <div>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => handleCreateSensor("moisture")}
+          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          Add moisture sensor
+        </button>
 
-          <p className="mt-1 text-gray-500">
-            Manage the sensors connected to the greenhouse.
-          </p>
-        </div>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={() => addSensor("moisture")}
-            disabled={creating !== ""}
-            className="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
-          >
-            {creating === "moisture"
-              ? "Adding..."
-              : "Add Moisture Sensor"}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => addSensor("light")}
-            disabled={creating !== ""}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-          >
-            {creating === "light"
-              ? "Adding..."
-              : "Add Light Sensor"}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => handleCreateSensor("light")}
+          className="rounded bg-yellow-500 px-4 py-2 text-white hover:bg-yellow-600"
+        >
+          Add light sensor
+        </button>
       </div>
 
       {error && (
-        <div className="mb-4 rounded-lg bg-red-50 p-4 text-red-700">
+        <div className="mb-4 rounded bg-red-100 p-3 text-red-700">
           {error}
         </div>
       )}
 
-      {sensors.length === 0 ? (
-        <div className="rounded-lg border border-dashed p-8 text-center">
-          <p className="text-gray-500">
-            No sensors have been added yet.
-          </p>
-        </div>
-      ) : (
+      {loading && <p>Loading sensors...</p>}
+
+      {!loading && !error && sensors.length === 0 && (
+        <p className="text-gray-500">No sensors found.</p>
+      )}
+
+      {!loading && sensors.length > 0 && (
         <div className="grid gap-4 md:grid-cols-2">
           {sensors.map((sensor) => (
             <div
               key={sensor.id}
-              className="rounded-lg border p-5"
+              className="rounded border p-4 shadow-sm"
             >
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-700">
-                  {sensor.display_name}
-                </h3>
+              <h3 className="font-semibold">{sensor.display_name}</h3>
 
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
-                  {sensor.device_type}
-                </span>
-              </div>
+              <p className="text-sm text-gray-600">
+                Type: {sensor.device_type}
+              </p>
 
-              <div className="mt-4 text-gray-600">
-                <p>
-                  Threshold:{" "}
-                  <strong>
-                    {sensor.default_config.threshold}
-                  </strong>
-                </p>
+              <p className="text-sm text-gray-600">
+                Unit: {sensor.default_config.unit}
+              </p>
 
-                <p>
-                  Unit:{" "}
-                  <strong>
-                    {sensor.default_config.unit}
-                  </strong>
-                </p>
-              </div>
+              <p className="text-sm text-gray-600">
+                Threshold: {sensor.default_config.threshold}
+              </p>
+
+              <p className="text-sm text-gray-600">
+                Sampling interval:{" "}
+                {sensor.default_config.sampling_interval_seconds} seconds
+              </p>
             </div>
           ))}
         </div>
       )}
-    </section>
+    </div>
   );
 }

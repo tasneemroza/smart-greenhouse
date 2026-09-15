@@ -1,22 +1,18 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
-export type Sensor = {
+export type SensorDto = {
   id: string;
   device_type: string;
   display_name: string;
   default_config: {
-    threshold: number;
+    sampling_interval_seconds: number;
     unit: string;
+    threshold: number;
   };
 };
 
-export type CreateSensorRequest = {
-  type: string;
-  display_name?: string;
-};
-
-export async function getSensors(): Promise<Sensor[]> {
+export async function fetchSensors(): Promise<SensorDto[]> {
   const response = await fetch(`${API_BASE_URL}/api/sensors`);
 
   if (!response.ok) {
@@ -27,14 +23,18 @@ export async function getSensors(): Promise<Sensor[]> {
 }
 
 export async function createSensor(
-  sensor: CreateSensorRequest,
-): Promise<Sensor> {
+  type: string,
+  displayName?: string,
+): Promise<SensorDto> {
   const response = await fetch(`${API_BASE_URL}/api/sensors`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(sensor),
+    body: JSON.stringify({
+      type,
+      display_name: displayName,
+    }),
   });
 
   if (!response.ok) {
