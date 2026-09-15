@@ -1,0 +1,73 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-greenhouse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-greenhouse}
+      POSTGRES_DB: ${POSTGRES_DB:-greenhouse}
+
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+    volumes:
+      - greenhouse_pgdata:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-greenhouse} -d ${POSTGRES_DB:-greenhouse}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+
+    environment:
+      POSTGRES_USER: greenhouse
+      POSTGRES_PASSWORD: greenhouse
+      POSTGRES_DB: greenhouse
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      DATABASE_URL: postgresql+psycopg://greenhouse:greenhouse@postgres:5432/greenhouse
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      CORS_ORIGINS: http://localhost:5173
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./backend:/app
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build:
+      context: ./frontend
+
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+
+    ports:
+      - "5173:5173"
+
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    depends_on:
+      - backend
+
+    command: npm run dev -- --host 0.0.0.0 --port 5173
+
+volumes:
+  greenhouse_pgdata:
