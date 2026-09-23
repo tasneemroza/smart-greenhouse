@@ -9,6 +9,7 @@ import "./index.css";
 
 import SensorList from "./features/sensors/SensorList";
 import DeviceList from "./components/devices/DeviceList";
+import LocationConfigWizard from "./components/config/LocationConfigWizard";
 
 function Dashboard() {
   return (
@@ -50,15 +51,13 @@ function Dashboard() {
           <div className="grid gap-6 md:grid-cols-3">
             <section
               id="config"
-              className="rounded-2xl border border-green-100 bg-white p-6 shadow-sm"
+              className="rounded-2xl border border-green-100 bg-white p-6 shadow-sm md:col-span-3"
             >
-              <h2 className="text-lg font-semibold text-gray-800">
-                Config
+              <h2 className="mb-5 text-xl font-semibold text-gray-800">
+                Configuration
               </h2>
 
-              <p className="mt-2 text-sm text-gray-500">
-                Greenhouse configuration will be available here.
-              </p>
+              <LocationConfigWizard />
             </section>
 
             <section
