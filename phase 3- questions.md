@@ -1,5 +1,16 @@
 # Phase 3 — Abstract Factory questions
 
+**Pattern / focus:** Abstract Factory.
+
+**Read first:** [Guide 03](../../materials/guides/03-abstract-factory.md) · [Requirements](requirements.md)
+
+## How to answer
+
+- Use your own wording. Do not paste teaching-example types (for example warrior/mage class kits) as if they were your greenhouse classes.
+- When a question asks about *this application*, refer to device families, provision, and the unified devices API from the lab.
+- Short answers are fine when the question is narrow. Write a few sentences when it asks you to explain or compare.
+- Write each answer inside the matching **Your Answer** note. Replace the placeholder; leave the question text unchanged.
+
 ## A. Pattern
 
 1. State the intent of Abstract Factory in plain language. What goes wrong when related products are chosen independently (`if format` for each piece) instead of as a **family**?
@@ -7,10 +18,10 @@
 Abstract Factory creates a group of related products that work together. Choosing them separately can cause incompatible products to be mixed.
 
 2. Name the main participants (**abstract factory**, **concrete factory**, **abstract products**, **concrete products**, **client**). How does choosing a factory at the start **commit** the client to one family?
-
+   
 The abstract factory defines the creation methods, and the concrete factory creates one specific family. The client chooses one factory, so the products come from that same family.
 
-3. When should you use Abstract Factory, and when should you skip it (for example only one product type per request, or mixing siblings is valid)?
+3.  When should you use Abstract Factory, and when should you skip it (for example only one product type per request, or mixing siblings is valid)?
 
 Use it when several related products need to work together. Skip it when there is only one product type or mixing products is okay.
 
