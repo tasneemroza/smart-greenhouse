@@ -115,4 +115,6 @@ class DeviceRepository:
             device_family=row.device_family,
             display_name=row.display_name or row.device_type,
             default_config=row.default_config,
+            location_id=row.location_id,
+            zone_id=row.zone_id,
         )

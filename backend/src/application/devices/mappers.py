@@ -10,6 +10,8 @@ def device_to_dto(device: Device) -> DeviceDto:
         device_family=device.device_family,
         display_name=device.display_name,
         default_config=device.default_config,
+        location_id=device.location_id,
+        zone_id=device.zone_id,
     )
 
 

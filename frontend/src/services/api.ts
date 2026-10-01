@@ -12,6 +12,25 @@ export type SensorDto = {
   };
 };
 
+export type ReadingDto = {
+  device_id: string;
+  value: number;
+  unit: string;
+  source: "simulation" | "mqtt" | "vendor";
+  recorded_at: string;
+};
+
+export type SamplingConfigDto = {
+  sampling_interval_seconds: number;
+  tracking_enabled: boolean;
+};
+
+export type SamplingResponse = {
+  device_id: string;
+  sampling_interval_seconds: number;
+  tracking_enabled: boolean;
+};
+
 export type DeviceFamily = "simulation" | "edge";
 
 export type DeviceDto = {
@@ -21,6 +40,22 @@ export type DeviceDto = {
   device_family: DeviceFamily;
   display_name: string;
   default_config: Record<string, unknown>;
+  location_id: string | null;
+  zone_id: string | null;
+};
+
+export type LocationDto = {
+  id: string;
+  name: string;
+};
+
+export type ZoneDto = {
+  id: string;
+  location_id: string;
+  name: string;
+  moisture_threshold_low: number;
+  moisture_threshold_high: number;
+  schedule: Record<string, unknown>;
 };
 
 export async function fetchSensors(): Promise<SensorDto[]> {
@@ -51,6 +86,62 @@ export async function createSensor(
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.detail || "Failed to create sensor");
+  }
+
+  return response.json();
+}
+
+export async function readSensor(
+  deviceId: string,
+): Promise<ReadingDto> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/sensors/${deviceId}/read`,
+    {
+      method: "POST",
+    },
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "Failed to read sensor");
+  }
+
+  return response.json();
+}
+
+export async function fetchReadings(
+  deviceId: string,
+  limit = 20,
+): Promise<ReadingDto[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/sensors/${deviceId}/readings?limit=${limit}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load sensor readings");
+  }
+
+  return response.json();
+}
+
+export async function updateSampling(
+  deviceId: string,
+  config: SamplingConfigDto,
+): Promise<SamplingResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/devices/${deviceId}/sampling`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(config),
+    },
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "Failed to update sampling");
   }
 
   return response.json();
@@ -95,6 +186,58 @@ export async function provisionDeviceFamily(
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.detail || "Failed to provision device family");
+  }
+
+  return response.json();
+}
+
+export async function fetchLocations(): Promise<LocationDto[]> {
+  const response = await fetch(`${API_BASE_URL}/api/locations`);
+
+  if (!response.ok) {
+    throw new Error("Failed to load locations");
+  }
+
+  return response.json();
+}
+
+export async function fetchZones(
+  locationId: string,
+): Promise<ZoneDto[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/locations/${locationId}/zones`,
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "Failed to load zones");
+  }
+
+  return response.json();
+}
+
+export async function assignDeviceToZone(
+  deviceId: string,
+  zoneId: string | null,
+): Promise<DeviceDto> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/devices/${deviceId}/zone`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        zone_id: zoneId,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      error.detail || "Failed to assign device to zone",
+    );
   }
 
   return response.json();

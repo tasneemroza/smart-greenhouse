@@ -10,3 +10,5 @@ class Device:
     device_family: str
     display_name: str
     default_config: dict
+    location_id: UUID | None = None
+    zone_id: UUID | None = None
