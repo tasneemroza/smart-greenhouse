@@ -17,6 +17,8 @@ class DeviceRepository:
             device_family="simulation",
             display_name=sensor.display_name,
             default_config=sensor.default_config,
+            sampling_interval_seconds=sensor.sampling_interval_seconds,
+            tracking_enabled=sensor.tracking_enabled,
         )
 
         self.db.add(device)
@@ -28,6 +30,8 @@ class DeviceRepository:
             device_type=device.device_type,
             display_name=device.display_name,
             default_config=device.default_config,
+            sampling_interval_seconds=device.sampling_interval_seconds,
+            tracking_enabled=device.tracking_enabled,
         )
 
     def list_sensors(self) -> list[Sensor]:
@@ -45,6 +49,8 @@ class DeviceRepository:
                 device_type=device.device_type,
                 display_name=device.display_name,
                 default_config=device.default_config,
+                sampling_interval_seconds=device.sampling_interval_seconds,
+                tracking_enabled=device.tracking_enabled,
             )
             for device in devices
         ]

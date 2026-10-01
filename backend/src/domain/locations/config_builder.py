@@ -35,9 +35,17 @@ class LocationConfigBuilder:
         if not self._zones:
             raise ConfigurationError("At least one zone is required.")
 
+        zone_names = [zone.name.casefold() for zone in self._zones]
+
+        if len(zone_names) != len(set(zone_names)):
+            raise ConfigurationError("Zone names must be unique within a location.")
+
         for zone in self._zones:
             if not zone.name:
                 raise ConfigurationError("Zone name is required.")
+
+            if not zone.schedule:
+                raise ConfigurationError("Zone schedule is required.")
 
             if not 0.0 <= zone.moisture_threshold_low <= 1.0:
                 raise ConfigurationError(

@@ -86,7 +86,14 @@ def update_sampling(
             "sampling_interval_seconds": device.sampling_interval_seconds,
             "tracking_enabled": device.tracking_enabled,
         }
+
     except ValueError as error:
+        if str(error) == "Device not found":
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=str(error),
+            ) from error
+
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(error),

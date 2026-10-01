@@ -8,3 +8,5 @@ class Sensor:
     device_type: str
     display_name: str
     default_config: dict
+    sampling_interval_seconds: int
+    tracking_enabled: bool

@@ -10,6 +10,8 @@ export type SensorDto = {
     unit: string;
     threshold: number;
   };
+  sampling_interval_seconds: number;
+  tracking_enabled: boolean;
 };
 
 export type ReadingDto = {

@@ -20,6 +20,8 @@ class MoistureSensorCreator(SensorCreator):
                 "unit": "vwc",
                 "threshold": 40,
             },
+            sampling_interval_seconds=300,
+            tracking_enabled=True,
         )
 
 
@@ -34,6 +36,8 @@ class LightSensorCreator(SensorCreator):
                 "unit": "lux",
                 "threshold": 500,
             },
+            sampling_interval_seconds=300,
+            tracking_enabled=True,
         )
 
 

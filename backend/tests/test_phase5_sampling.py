@@ -71,7 +71,7 @@ def test_reading_ingest_stores_simulation_reading():
         )
 
         assert reading.device_id == device.id
-        assert 30.0 <= reading.value <= 70.0
+        assert 0.2 <= reading.value <= 0.6
         assert reading.unit == "vwc"
         assert reading.source == "simulation"
         assert reading.recorded_at == timestamp
@@ -308,4 +308,3 @@ def test_sampling_service_updates_configuration():
         set_simulation_config(device)
         db.commit()
         db.close()
-

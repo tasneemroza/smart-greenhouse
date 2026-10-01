@@ -20,12 +20,17 @@ class SimulationSensorAdapter(SensorPort):
     def read(self, now: datetime | None = None) -> Reading:
         recorded_at = now or datetime.now(timezone.utc)
 
+        if recorded_at.tzinfo is None:
+            raise ValueError("recorded_at must be timezone-aware")
+
         if self.device_type == "moisture_sensor":
-            value = random.uniform(30.0, 70.0)
+            value = random.uniform(0.2, 0.6)
         elif self.device_type == "light_sensor":
-            value = random.uniform(100.0, 1000.0)
+            value = random.uniform(200.0, 2000.0)
         else:
-            value = random.uniform(0.0, 100.0)
+            raise ValueError(
+                f"Unsupported simulation sensor type: {self.device_type}"
+            )
 
         return Reading(
             device_id=self.device_id,

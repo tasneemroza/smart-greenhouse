@@ -50,6 +50,7 @@ def test_build_rejects_invalid_thresholds():
             name="North Zone",
             moisture_threshold_low=0.8,
             moisture_threshold_high=0.4,
+            schedule={"watering": "08:00"},
         )
     )
 
@@ -65,6 +66,45 @@ def test_build_rejects_threshold_out_of_range():
             name="North Zone",
             moisture_threshold_low=-0.1,
             moisture_threshold_high=0.4,
+            schedule={"watering": "08:00"},
+        )
+    )
+
+    with pytest.raises(ConfigurationError):
+        builder.build()
+
+
+def test_build_rejects_duplicate_zone_names():
+    builder = (
+        LocationConfigBuilder()
+        .with_location_name("Lab Site A")
+        .add_zone(
+            name="North Zone",
+            moisture_threshold_low=0.2,
+            moisture_threshold_high=0.45,
+            schedule={"watering": "08:00"},
+        )
+        .add_zone(
+            name="north zone",
+            moisture_threshold_low=0.3,
+            moisture_threshold_high=0.6,
+            schedule={"watering": "10:00"},
+        )
+    )
+
+    with pytest.raises(ConfigurationError):
+        builder.build()
+
+
+def test_build_rejects_empty_schedule():
+    builder = (
+        LocationConfigBuilder()
+        .with_location_name("Lab Site A")
+        .add_zone(
+            name="North Zone",
+            moisture_threshold_low=0.2,
+            moisture_threshold_high=0.45,
+            schedule={},
         )
     )
 

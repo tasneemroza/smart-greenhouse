@@ -39,16 +39,14 @@ export default function SensorList() {
         data.map(async (sensor) => {
           try {
             const readings = await fetchReadings(sensor.id, 20);
-            const latest = readings[0] ?? null;
 
             return {
               id: sensor.id,
               state: {
-                latest,
+                latest: readings[0] ?? null,
                 readings,
-                interval:
-                  sensor.default_config.sampling_interval_seconds || 300,
-                tracking: true,
+                interval: sensor.sampling_interval_seconds,
+                tracking: sensor.tracking_enabled,
               },
             };
           } catch {
@@ -57,9 +55,8 @@ export default function SensorList() {
               state: {
                 latest: null,
                 readings: [],
-                interval:
-                  sensor.default_config.sampling_interval_seconds || 300,
-                tracking: true,
+                interval: sensor.sampling_interval_seconds,
+                tracking: sensor.tracking_enabled,
               },
             };
           }
@@ -85,7 +82,7 @@ export default function SensorList() {
   }, []);
 
   useEffect(() => {
-    const interval = window.setInterval(async () => {
+    const timer = window.setInterval(async () => {
       for (const sensor of sensors) {
         const state = sensorStates[sensor.id];
 
@@ -95,13 +92,12 @@ export default function SensorList() {
 
         try {
           const readings = await fetchReadings(sensor.id, 20);
-          const latest = readings[0] ?? null;
 
           setSensorStates((current) => ({
             ...current,
             [sensor.id]: {
               ...current[sensor.id],
-              latest,
+              latest: readings[0] ?? null,
               readings,
             },
           }));
@@ -111,7 +107,7 @@ export default function SensorList() {
       }
     }, 5000);
 
-    return () => window.clearInterval(interval);
+    return () => window.clearInterval(timer);
   }, [sensors, sensorStates]);
 
   async function handleCreateSensor(type: string) {
@@ -124,19 +120,17 @@ export default function SensorList() {
           : "Greenhouse light sensor";
 
       const newSensor = await createSensor(type, displayName);
+      const readings = await fetchReadings(newSensor.id, 20);
 
       setSensors((current) => [newSensor, ...current]);
-
-      const readings = await fetchReadings(newSensor.id, 20);
 
       setSensorStates((current) => ({
         ...current,
         [newSensor.id]: {
           latest: readings[0] ?? null,
           readings,
-          interval:
-            newSensor.default_config.sampling_interval_seconds || 300,
-          tracking: true,
+          interval: newSensor.sampling_interval_seconds,
+          tracking: newSensor.tracking_enabled,
         },
       }));
     } catch (err) {
@@ -175,7 +169,7 @@ export default function SensorList() {
     }
   }
 
-  async function handleIntervalChange(
+  function handleIntervalChange(
     sensorId: string,
     value: string,
   ) {
@@ -235,6 +229,11 @@ export default function SensorList() {
     const current = sensorStates[sensorId];
 
     if (!current) {
+      return;
+    }
+
+    if (current.interval < 5) {
+      setError("Sampling interval must be at least 5 seconds");
       return;
     }
 
@@ -319,15 +318,7 @@ export default function SensorList() {
                   </div>
 
                   {state?.latest && (
-                    <span
-                      className={`rounded px-2 py-1 text-xs font-medium ${
-                        state.latest.source === "simulation"
-                          ? "bg-blue-100 text-blue-700"
-                          : state.latest.source === "mqtt"
-                            ? "bg-purple-100 text-purple-700"
-                            : "bg-gray-200 text-gray-700"
-                      }`}
-                    >
+                    <span className="rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
                       {state.latest.source}
                     </span>
                   )}
@@ -363,7 +354,7 @@ export default function SensorList() {
                     type="button"
                     onClick={() => handleRead(sensor.id)}
                     disabled={readingId === sensor.id}
-                    className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
                   >
                     {readingId === sensor.id
                       ? "Reading..."
@@ -380,7 +371,10 @@ export default function SensorList() {
                     <input
                       type="number"
                       min="5"
-                      value={state?.interval ?? 300}
+                      value={
+                        state?.interval ??
+                        sensor.sampling_interval_seconds
+                      }
                       onChange={(event) =>
                         handleIntervalChange(
                           sensor.id,
@@ -396,7 +390,7 @@ export default function SensorList() {
                         handleSaveInterval(sensor.id)
                       }
                       disabled={savingId === sensor.id}
-                      className="rounded bg-gray-700 px-3 py-2 text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded bg-gray-700 px-3 py-2 text-white hover:bg-gray-800 disabled:opacity-50"
                     >
                       Save
                     </button>
@@ -418,7 +412,10 @@ export default function SensorList() {
                   <input
                     id={`tracking-${sensor.id}`}
                     type="checkbox"
-                    checked={state?.tracking ?? true}
+                    checked={
+                      state?.tracking ??
+                      sensor.tracking_enabled
+                    }
                     disabled={savingId === sensor.id}
                     onChange={(event) =>
                       handleTrackingChange(
@@ -437,23 +434,25 @@ export default function SensorList() {
 
                   {state?.readings.length ? (
                     <div className="space-y-1">
-                      {state.readings.slice(0, 5).map((reading) => (
-                        <div
-                          key={`${reading.recorded_at}-${reading.value}`}
-                          className="flex justify-between text-xs text-gray-600"
-                        >
-                          <span>
-                            {reading.value.toFixed(2)}{" "}
-                            {reading.unit}
-                          </span>
+                      {state.readings
+                        .slice(0, 5)
+                        .map((reading) => (
+                          <div
+                            key={`${reading.recorded_at}-${reading.value}`}
+                            className="flex justify-between text-xs text-gray-600"
+                          >
+                            <span>
+                              {reading.value.toFixed(2)}{" "}
+                              {reading.unit}
+                            </span>
 
-                          <span>
-                            {formatRecordedAt(
-                              reading.recorded_at,
-                            )}
-                          </span>
-                        </div>
-                      ))}
+                            <span>
+                              {formatRecordedAt(
+                                reading.recorded_at,
+                              )}
+                            </span>
+                          </div>
+                        ))}
                     </div>
                   ) : (
                     <p className="text-xs text-gray-500">

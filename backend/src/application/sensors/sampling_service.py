@@ -16,6 +16,11 @@ class SamplingService:
         device_id: UUID,
         config: SamplingConfigDto,
     ) -> DeviceRow:
+        if config.sampling_interval_seconds < 5:
+            raise ValueError(
+                "sampling_interval_seconds must be at least 5"
+            )
+
         device = self.db.scalar(
             select(DeviceRow).where(DeviceRow.id == device_id)
         )
