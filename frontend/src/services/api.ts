@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 export type SensorDto = {
   id: string;
@@ -240,6 +240,60 @@ export async function assignDeviceToZone(
     throw new Error(
       error.detail || "Failed to assign device to zone",
     );
+  }
+
+  return response.json();
+}
+
+export type AutomationStrategyKey = "conservative" | "aggressive";
+
+export type AutomationRecommendationDto = {
+  zone_id: string;
+  zone_name: string;
+  action: string;
+  reason: string;
+  score: number | null;
+  intensity: number | null;
+};
+
+export type AutomationEvaluationDto = {
+  location_id: string;
+  strategy_key: AutomationStrategyKey;
+  recommendations: AutomationRecommendationDto[];
+};
+
+export async function saveAutomationStrategy(
+  locationId: string,
+  strategyKey: AutomationStrategyKey,
+): Promise<{ location_id: string; strategy_key: AutomationStrategyKey; updated_at: string }> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/locations/${locationId}/automation`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ strategy_key: strategyKey }),
+    },
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "Failed to save automation strategy");
+  }
+
+  return response.json();
+}
+
+export async function evaluateAutomation(
+  locationId: string,
+): Promise<AutomationEvaluationDto> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/locations/${locationId}/automation/evaluate`,
+    { method: "POST" },
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "Failed to evaluate automation");
   }
 
   return response.json();

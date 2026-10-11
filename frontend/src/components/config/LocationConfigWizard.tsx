@@ -53,7 +53,7 @@ function LocationConfigWizard() {
   const loadLocations = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/locations",
+        "http://127.0.0.1:8000/api/locations",
       );
 
       if (!response.ok) {
@@ -165,7 +165,7 @@ function LocationConfigWizard() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/locations/config",
+        "http://127.0.0.1:8000/api/locations/config",
         {
           method: "POST",
           headers: {
@@ -221,7 +221,7 @@ function LocationConfigWizard() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/locations/${locationId}/config`,
+        `http://127.0.0.1:8000/api/locations/${locationId}/config`,
       );
 
       const data = await response.json();
@@ -249,7 +249,7 @@ function LocationConfigWizard() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/locations/${locationId}`,
+        `http://127.0.0.1:8000/api/locations/${locationId}`,
         {
           method: "DELETE",
         },
@@ -336,7 +336,7 @@ function LocationConfigWizard() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/locations/${selectedLocationId}/zones/${editingZoneId}`,
+        `http://127.0.0.1:8000/api/locations/${selectedLocationId}/zones/${editingZoneId}`,
         {
           method: "PATCH",
           headers: {
@@ -404,7 +404,7 @@ function LocationConfigWizard() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/locations/${selectedLocationId}/zones/${zoneId}`,
+        `http://127.0.0.1:8000/api/locations/${selectedLocationId}/zones/${zoneId}`,
         {
           method: "DELETE",
         },
@@ -472,7 +472,7 @@ function LocationConfigWizard() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/locations/${selectedLocationId}/zones`,
+        `http://127.0.0.1:8000/api/locations/${selectedLocationId}/zones`,
         {
           method: "POST",
           headers: {
@@ -525,28 +525,28 @@ function LocationConfigWizard() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-800">
+        <h3 className="text-2xl font-bold tracking-tight text-gray-900">
           Location Configuration
         </h3>
 
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-2 text-sm leading-6 text-gray-500">
           Create and manage greenhouse locations and zones.
         </p>
       </div>
 
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+        <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
           {success}
         </div>
       )}
 
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
         <h4 className="font-semibold text-gray-800">
           Saved locations
         </h4>
@@ -560,16 +560,16 @@ function LocationConfigWizard() {
             locations.map((location) => (
               <div
                 key={location.id}
-                className={`flex items-center justify-between rounded-lg border p-3 ${
+                className={`flex items-center justify-between rounded-xl border p-3 transition-colors ${
                   selectedLocationId === location.id
-                    ? "border-green-300 bg-green-50"
-                    : "border-gray-200 bg-gray-50"
+                    ? "border-green-300 bg-green-50 shadow-sm"
+                    : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
                 }`}
               >
                 <button
                   type="button"
                   onClick={() => openLocation(location.id)}
-                  className="text-left font-medium text-gray-800 hover:text-green-700"
+                  className="text-left font-semibold text-gray-800 transition-colors hover:text-green-700"
                 >
                   {location.name}
                 </button>
@@ -578,7 +578,7 @@ function LocationConfigWizard() {
                   type="button"
                   onClick={() => deleteLocation(location.id)}
                   disabled={loading}
-                  className="text-sm text-red-600 hover:text-red-800 disabled:opacity-50"
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 hover:text-red-800 disabled:opacity-50"
                 >
                   Delete
                 </button>
@@ -588,7 +588,7 @@ function LocationConfigWizard() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+      <div className="rounded-2xl border border-gray-200 bg-gray-50/80 p-5 shadow-sm sm:p-6">
         <h4 className="font-semibold text-gray-800">
           Create new location
         </h4>
@@ -603,7 +603,7 @@ function LocationConfigWizard() {
             value={locationName}
             onChange={(event) => setLocationName(event.target.value)}
             placeholder="Lab Site A"
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
           />
         </div>
 
@@ -616,7 +616,7 @@ function LocationConfigWizard() {
             <button
               type="button"
               onClick={addZone}
-              className="rounded-lg bg-green-700 px-3 py-2 text-sm font-medium text-white hover:bg-green-800"
+              className="rounded-xl bg-green-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               Add zone
             </button>
@@ -625,7 +625,7 @@ function LocationConfigWizard() {
           {zones.map((zone, index) => (
             <div
               key={index}
-              className="rounded-xl border border-gray-200 bg-white p-4"
+              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6"
             >
               <div className="mb-4 flex items-center justify-between">
                 <h5 className="font-medium text-gray-800">
@@ -656,7 +656,7 @@ function LocationConfigWizard() {
                       updateZone(index, "name", event.target.value)
                     }
                     placeholder="Bench 1"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
 
@@ -671,7 +671,7 @@ function LocationConfigWizard() {
                     onChange={(event) =>
                       updateZone(index, "schedule", event.target.value)
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
 
@@ -693,7 +693,7 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
 
@@ -715,7 +715,7 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
               </div>
@@ -727,14 +727,14 @@ function LocationConfigWizard() {
           type="button"
           onClick={handleSubmit}
           disabled={loading}
-          className="mt-6 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-6 rounded-xl bg-green-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? "Saving..." : "Save configuration"}
         </button>
       </div>
 
       {savedConfig && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+        <div className="rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-5 shadow-sm sm:p-6">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h4 className="font-semibold text-green-900">
@@ -756,14 +756,14 @@ function LocationConfigWizard() {
                 setSuccess("");
               }}
               disabled={loading}
-              className="shrink-0 rounded-lg bg-green-700 px-3 py-2 text-sm font-medium text-white hover:bg-green-800 disabled:opacity-50"
+              className="shrink-0 rounded-xl bg-green-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50"
             >
               {showAddZone ? "Cancel" : "Add zone"}
             </button>
           </div>
 
           {showAddZone && (
-            <div className="mt-4 rounded-xl border border-green-100 bg-white p-4">
+            <div className="mt-4 rounded-2xl border border-green-100 bg-white p-5 shadow-sm">
               <h5 className="font-medium text-gray-800">
                 Add zone
               </h5>
@@ -781,7 +781,7 @@ function LocationConfigWizard() {
                       updateNewZone("name", event.target.value)
                     }
                     placeholder="Zone 2"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
 
@@ -796,7 +796,7 @@ function LocationConfigWizard() {
                     onChange={(event) =>
                       updateNewZone("schedule", event.target.value)
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
 
@@ -817,7 +817,7 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
 
@@ -838,7 +838,7 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-500"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
                   />
                 </div>
               </div>
@@ -858,7 +858,7 @@ function LocationConfigWizard() {
             {savedConfig.zones.map((zone) => (
               <div
                 key={zone.id}
-                className="rounded-lg border border-green-100 bg-white p-4"
+                className="rounded-xl border border-gray-200 bg-white p-4 transition-colors hover:border-green-200"
               >
                 {editingZoneId === zone.id && editingZone ? (
                   <>
@@ -956,7 +956,7 @@ function LocationConfigWizard() {
                         type="button"
                         onClick={cancelEditingZone}
                         disabled={loading}
-                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                        className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -989,7 +989,7 @@ function LocationConfigWizard() {
                           type="button"
                           onClick={() => startEditingZone(zone)}
                           disabled={loading}
-                          className="text-sm font-medium text-green-700 hover:text-green-900 disabled:opacity-50"
+                          className="rounded-lg px-2 py-1 text-sm font-semibold text-green-700 transition-colors hover:bg-green-50 hover:text-green-900 disabled:opacity-50"
                         >
                           Edit
                         </button>
@@ -1001,7 +1001,7 @@ function LocationConfigWizard() {
                             loading ||
                             savedConfig.zones.length <= 1
                           }
-                          className="text-sm font-medium text-red-600 hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="rounded-lg px-2 py-1 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50 hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           Delete
                         </button>

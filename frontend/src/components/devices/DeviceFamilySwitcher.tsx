@@ -1,4 +1,4 @@
-import type { DeviceFamily } from "../../services/api";
+﻿import type { DeviceFamily } from "../../services/api";
 
 type DeviceFamilySwitcherProps = {
   selectedFamily: DeviceFamily;
@@ -10,28 +10,36 @@ export default function DeviceFamilySwitcher({
   onChange,
 }: DeviceFamilySwitcherProps) {
   return (
-    <div className="mb-6 flex flex-wrap gap-2">
+    <div className="mb-6 inline-flex flex-wrap gap-2 rounded-2xl border border-gray-200 bg-gray-50 p-2 shadow-sm">
       <button
         type="button"
         onClick={() => onChange("simulation")}
-        className={`rounded px-4 py-2 ${
+        aria-pressed={selectedFamily === "simulation"}
+        className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
           selectedFamily === "simulation"
-            ? "bg-blue-600 text-white"
-            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            ? "bg-blue-600 text-white shadow-md"
+            : "bg-transparent text-gray-600 hover:bg-white hover:text-gray-900"
         }`}
       >
+        <span className="mr-2" aria-hidden="true">
+          ◉
+        </span>
         Simulation
       </button>
 
       <button
         type="button"
         onClick={() => onChange("edge")}
-        className={`rounded px-4 py-2 ${
+        aria-pressed={selectedFamily === "edge"}
+        className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
           selectedFamily === "edge"
-            ? "bg-blue-600 text-white"
-            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            ? "bg-blue-600 text-white shadow-md"
+            : "bg-transparent text-gray-600 hover:bg-white hover:text-gray-900"
         }`}
       >
+        <span className="mr-2" aria-hidden="true">
+          ◈
+        </span>
         Edge Hardware
       </button>
     </div>
