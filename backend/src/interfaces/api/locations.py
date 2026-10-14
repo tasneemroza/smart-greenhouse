@@ -3,6 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from src.application.locations.overview_dto import LocationOverviewDto
+from src.application.locations.overview_facade import LocationOverviewFacade
 from src.application.locations.assignment_service import (
     DeviceZoneAssignmentService,
 )
@@ -31,6 +33,11 @@ def get_location_service(
 ) -> LocationConfigService:
     return LocationConfigService(LocationRepository(db))
 
+
+def get_location_overview_facade(
+    db: Session = Depends(get_db),
+) -> LocationOverviewFacade:
+    return LocationOverviewFacade(db)
 
 def get_assignment_service(
     db: Session = Depends(get_db),
@@ -73,6 +80,24 @@ def list_locations(
         for location in locations
     ]
 
+
+@router.get(
+    "/{location_id}/overview",
+    response_model=LocationOverviewDto,
+)
+def get_location_overview(
+    location_id: UUID,
+    facade: LocationOverviewFacade = Depends(
+        get_location_overview_facade
+    ),
+):
+    try:
+        return facade.get_overview(location_id)
+    except LookupError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(error),
+        ) from error
 
 @router.get(
     "/{location_id}/config",

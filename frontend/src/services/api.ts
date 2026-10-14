@@ -298,3 +298,57 @@ export async function evaluateAutomation(
 
   return response.json();
 }
+
+export type OverviewDeviceDto = {
+  id: string;
+  device_type: string;
+  role: string;
+  display_name: string;
+};
+
+export type OverviewReadingDto = {
+  device_id: string;
+  value: number;
+  unit: string;
+  recorded_at: string;
+  tracking_enabled: boolean;
+  sampling_interval_seconds: number;
+};
+
+export type OverviewZoneDto = {
+  id: string;
+  name: string;
+  moisture_threshold_low: number;
+  moisture_threshold_high: number;
+  devices: OverviewDeviceDto[];
+  latest_readings: OverviewReadingDto[];
+};
+
+export type LocationOverviewDto = {
+  location: LocationDto;
+  device_counts: {
+    sensor: number;
+    actuator: number;
+  };
+  zones: OverviewZoneDto[];
+  strategy_key: string | null;
+  last_recommendation: {
+    action: string;
+    reason: string;
+  } | null;
+};
+
+export async function fetchOverview(
+  locationId: string,
+): Promise<LocationOverviewDto> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/locations/${locationId}/overview`,
+  );
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail || "Failed to load greenhouse overview");
+  }
+
+  return response.json();
+}

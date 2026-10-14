@@ -7,6 +7,7 @@ import SensorList from "./features/sensors/SensorList";
 import DeviceList from "./components/devices/DeviceList";
 import LocationConfigWizard from "./components/config/LocationConfigWizard";
 import AutomationPanel from "./features/automation/AutomationPanel";
+import OverviewPanel from "./features/overview/OverviewPanel";
 
 function Dashboard() {
   return (
@@ -72,7 +73,7 @@ function Dashboard() {
             </section>
             <section id="overview" className="rounded-2xl border border-[#DDE5DC] bg-white p-5 shadow-[0_3px_16px_rgba(41,59,50,0.04)]">
               <h2 className="text-base font-semibold text-[#315747]">Overview</h2>
-              <p className="mt-2 text-sm leading-6 text-[#6F7C73]">Greenhouse overview will be available here.</p>
+              <OverviewPanel />
             </section>
             <section id="controls" className="rounded-2xl border border-[#DDE5DC] bg-white p-5 shadow-[0_3px_16px_rgba(41,59,50,0.04)]">
               <h2 className="text-base font-semibold text-[#315747]">Controls</h2>
