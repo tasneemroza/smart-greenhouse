@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 
 import {
   assignDeviceToZone,
@@ -6,6 +6,7 @@ import {
   fetchLocations,
   fetchZones,
   provisionDeviceFamily,
+  type ActuatorState,
   type DeviceDto,
   type DeviceFamily,
   type LocationDto,
@@ -17,6 +18,14 @@ import DeviceFamilySwitcher from "./DeviceFamilySwitcher";
 type ZoneOption = {
   id: string;
   label: string;
+};
+
+const actuatorStateStyles: Record<ActuatorState, string> = {
+  off: "bg-slate-100 text-slate-700",
+  idle: "bg-slate-100 text-slate-700",
+  running: "bg-emerald-100 text-emerald-700",
+  error: "bg-red-100 text-red-700",
+  maintenance: "bg-amber-100 text-amber-700",
 };
 
 export default function DeviceList() {
@@ -146,7 +155,7 @@ export default function DeviceList() {
         return {
           id: zone.id,
           label: location
-            ? `${location.name} — ${zone.name}`
+            ? `${location.name} - ${zone.name}`
             : zone.name,
         };
       })
@@ -169,7 +178,7 @@ export default function DeviceList() {
     const location = locationById.get(zone.location_id);
 
     return location
-      ? `${location.name} — ${zone.name}`
+      ? `${location.name} - ${zone.name}`
       : zone.name;
   }
 
@@ -220,6 +229,14 @@ export default function DeviceList() {
                 <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
                   {device.device_family}
                 </span>
+                {device.role === "actuator" && device.state && (
+                  <span
+                    title={`Allowed commands: ${device.allowed_commands.join(", ") || "None"}`}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${actuatorStateStyles[device.state]}`}
+                  >
+                    {device.state}
+                  </span>
+                )}
               </div>
 
               <h3 className="text-lg font-bold text-gray-900">
@@ -290,3 +307,6 @@ export default function DeviceList() {
     </div>
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-const API_BASE_URL =
+﻿const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 export type SensorDto = {
@@ -35,6 +35,13 @@ export type SamplingResponse = {
 
 export type DeviceFamily = "simulation" | "edge";
 
+export type ActuatorState =
+  | "off"
+  | "idle"
+  | "running"
+  | "error"
+  | "maintenance";
+
 export type DeviceDto = {
   id: string;
   device_type: string;
@@ -44,6 +51,8 @@ export type DeviceDto = {
   default_config: Record<string, unknown>;
   location_id: string | null;
   zone_id: string | null;
+  state: ActuatorState | null;
+  allowed_commands: string[];
 };
 
 export type LocationDto = {
@@ -352,3 +361,5 @@ export async function fetchOverview(
 
   return response.json();
 }
+
+

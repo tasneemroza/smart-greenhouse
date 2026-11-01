@@ -1,10 +1,18 @@
-from uuid import UUID
+﻿from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from src.application.devices.actuator_state_dto import ActuatorStateDto
+from src.application.devices.actuator_state_service import (
+    ActuatorNotFoundError,
+    ActuatorStateNotFoundError,
+    ActuatorStateService,
+)
 from src.application.devices.dto import DeviceDto
 from src.application.devices.family_service import DeviceFamilyService
+from src.application.devices.mappers import device_to_dto
 from src.application.devices.mappers import devices_to_dtos
 from src.application.locations.assignment_service import (
     DeviceZoneAssignmentService,
@@ -12,12 +20,20 @@ from src.application.locations.assignment_service import (
 from src.application.locations.dto import DeviceZoneAssignmentDto
 from src.application.sensors.sampling_config_dto import SamplingConfigDto
 from src.application.sensors.sampling_service import SamplingService
+from src.domain.actuators.state import InvalidActuatorTransition
 from src.infrastructure.db import get_db
+from src.infrastructure.persistence.actuator_state_repository import (
+    ActuatorStateRepository,
+)
 from src.infrastructure.persistence.device_repository import DeviceRepository
 from src.infrastructure.persistence.location_repository import LocationRepository
 
 
 router = APIRouter(prefix="/api/devices", tags=["devices"])
+
+
+class ActuatorTransitionRequest(BaseModel):
+    target: str
 
 
 def get_device_service(
@@ -38,17 +54,56 @@ def get_assignment_service(
     return DeviceZoneAssignmentService(LocationRepository(db))
 
 
+def get_actuator_state_service(
+    db: Session = Depends(get_db),
+) -> ActuatorStateService:
+    return ActuatorStateService(ActuatorStateRepository(db))
+
+
+def devices_with_states(
+    devices,
+    state_service: ActuatorStateService,
+) -> list[DeviceDto]:
+    result = []
+
+    for device in devices:
+        if device.role == "actuator":
+            if device.id is None:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Actuator device has no ID.",
+                )
+
+            actuator_state = state_service.get_state(device.id)
+
+            result.append(
+                device_to_dto(
+                    device,
+                    state=actuator_state.state,
+                    allowed_commands=actuator_state.allowed_commands,
+                )
+            )
+        else:
+            result.append(device_to_dto(device))
+
+    return result
+
+
 @router.get("", response_model=list[DeviceDto])
 def list_devices(
     family: str | None = Query(default=None),
     role: str | None = Query(default=None),
     service: DeviceFamilyService = Depends(get_device_service),
+    state_service: ActuatorStateService = Depends(
+        get_actuator_state_service
+    ),
 ):
     devices = service.list_devices(
         device_family=family,
         role=role,
     )
-    return devices_to_dtos(devices)
+
+    return devices_with_states(devices, state_service)
 
 
 @router.post(
@@ -59,10 +114,13 @@ def list_devices(
 def provision_devices(
     family: str = Query(...),
     service: DeviceFamilyService = Depends(get_device_service),
+    state_service: ActuatorStateService = Depends(
+        get_actuator_state_service
+    ),
 ):
     try:
         devices = service.provision_family(family)
-        return devices_to_dtos(devices)
+        return devices_with_states(devices, state_service)
     except ValueError as error:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -110,6 +168,9 @@ def assign_device_to_zone(
     service: DeviceZoneAssignmentService = Depends(
         get_assignment_service
     ),
+    state_service: ActuatorStateService = Depends(
+        get_actuator_state_service
+    ),
 ):
     try:
         device = service.assign(
@@ -128,4 +189,40 @@ def assign_device_to_zone(
             detail="Device not found.",
         )
 
-    return devices_to_dtos([device])[0]
+    return devices_with_states([device], state_service)[0]
+
+
+@router.post(
+    "/{device_id}/transition",
+    response_model=ActuatorStateDto,
+)
+def transition_actuator(
+    device_id: UUID,
+    request: ActuatorTransitionRequest,
+    service: ActuatorStateService = Depends(
+        get_actuator_state_service
+    ),
+):
+    try:
+        return service.transition(
+            device_id=device_id,
+            target=request.target,
+        )
+
+    except ActuatorNotFoundError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(error),
+        ) from error
+
+    except ActuatorStateNotFoundError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(error),
+        ) from error
+
+    except InvalidActuatorTransition as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(error),
+        ) from error

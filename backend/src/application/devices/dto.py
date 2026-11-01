@@ -1,6 +1,6 @@
-from uuid import UUID
+﻿from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class DeviceDto(BaseModel):
@@ -14,3 +14,5 @@ class DeviceDto(BaseModel):
     default_config: dict
     location_id: UUID | None
     zone_id: UUID | None
+    state: str | None = None
+    allowed_commands: list[str] = Field(default_factory=list)

@@ -1,9 +1,12 @@
-from sqlalchemy import select
+﻿from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from src.domain.devices.entity import Device
 from src.domain.sensors.entity import Sensor
-from src.infrastructure.persistence.models import DeviceRow
+from src.infrastructure.persistence.models import (
+    ActuatorStateRow,
+    DeviceRow,
+)
 
 
 class DeviceRepository:
@@ -65,6 +68,16 @@ class DeviceRepository:
         )
 
         self.db.add(row)
+        self.db.flush()
+
+        if row.role == "actuator":
+            self.db.add(
+                ActuatorStateRow(
+                    device_id=row.id,
+                    state="idle",
+                )
+            )
+
         self.db.commit()
         self.db.refresh(row)
 
@@ -83,6 +96,20 @@ class DeviceRepository:
         ]
 
         self.db.add_all(rows)
+        self.db.flush()
+
+        state_rows = [
+            ActuatorStateRow(
+                device_id=row.id,
+                state="idle",
+            )
+            for row in rows
+            if row.role == "actuator"
+        ]
+
+        if state_rows:
+            self.db.add_all(state_rows)
+
         self.db.commit()
 
         for row in rows:

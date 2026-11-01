@@ -1,8 +1,13 @@
-from src.application.devices.dto import DeviceDto
+﻿from src.application.devices.dto import DeviceDto
 from src.domain.devices.entity import Device
 
 
-def device_to_dto(device: Device) -> DeviceDto:
+def device_to_dto(
+    device: Device,
+    *,
+    state: str | None = None,
+    allowed_commands: list[str] | None = None,
+) -> DeviceDto:
     return DeviceDto(
         id=device.id,
         device_type=device.device_type,
@@ -12,6 +17,8 @@ def device_to_dto(device: Device) -> DeviceDto:
         default_config=device.default_config,
         location_id=device.location_id,
         zone_id=device.zone_id,
+        state=state,
+        allowed_commands=allowed_commands or [],
     )
 
 

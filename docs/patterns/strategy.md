@@ -39,3 +39,16 @@ The Phase 6 unit tests verify that:
 - The conservative and aggressive strategies produce different recommendations for the same context.
 - Missing moisture data produces a wait recommendation.
 - An unknown strategy key is rejected.
+
+## Exercise: Add a third strategy
+
+Create a third strategy class that inherits from `AutomationStrategy` and implements `decide(context)`.
+
+For example, a new strategy could use a different moisture threshold or another rule based on the available context.
+
+1. Implement the new strategy without adding database queries to the domain class.
+2. Register its key in `get_strategy(key)`.
+3. Add a unit test showing how it behaves for a sample `LocationAutomationContext`.
+4. Verify that the existing conservative and aggressive strategies still pass their tests.
+
+The goal is to add a new algorithm without rewriting `AutomationService` or the API router.
