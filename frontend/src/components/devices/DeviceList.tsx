@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   assignDeviceToZone,
@@ -33,6 +33,7 @@ export default function DeviceList() {
     useState<DeviceFamily>("simulation");
 
   const [devices, setDevices] = useState<DeviceDto[]>([]);
+  const [showAllDevices, setShowAllDevices] = useState(false);
   const [locations, setLocations] = useState<LocationDto[]>([]);
   const [zones, setZones] = useState<ZoneDto[]>([]);
 
@@ -141,6 +142,39 @@ export default function DeviceList() {
     }
   }
 
+  const visibleDevices = useMemo(() => {
+    if (showAllDevices) {
+      return devices;
+    }
+
+    const seenUnassignedSensorTypes = new Set<string>();
+
+    return devices.filter((device) => {
+      if (device.location_id || device.zone_id) {
+        return true;
+      }
+
+      if (device.device_family === "edge") {
+        return true;
+      }
+
+      if (device.device_type === "test_pump") {
+        return false;
+      }
+
+      if (device.role === "actuator") {
+        return true;
+      }
+
+      if (seenUnassignedSensorTypes.has(device.device_type)) {
+        return false;
+      }
+
+      seenUnassignedSensorTypes.add(device.device_type);
+      return true;
+    });
+  }, [devices, showAllDevices]);
+
   const locationById = useMemo(() => {
     return new Map(
       locations.map((location) => [location.id, location]),
@@ -202,6 +236,29 @@ export default function DeviceList() {
         </button>
       </div>
 
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4">
+        <div>
+          <p className="font-semibold text-gray-900">
+            Device Overview
+          </p>
+          <p className="text-sm text-gray-500">
+            Showing {visibleDevices.length} of {devices.length} devices
+          </p>
+        </div>
+
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700">
+          <input
+            type="checkbox"
+            checked={showAllDevices}
+            onChange={(event) =>
+              setShowAllDevices(event.target.checked)
+            }
+            className="h-4 w-4 accent-green-600"
+          />
+          Show all devices
+        </label>
+      </div>
+
       {error && (
         <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
           {error}
@@ -210,13 +267,13 @@ export default function DeviceList() {
 
       {loading && <p>Loading devices...</p>}
 
-      {!loading && !error && devices.length === 0 && (
+      {!loading && !error && visibleDevices.length === 0 && (
         <p className="text-gray-500">No devices found.</p>
       )}
 
-      {!loading && devices.length > 0 && (
+      {!loading && visibleDevices.length > 0 && (
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {devices.map((device) => (
+          {visibleDevices.map((device) => (
             <div
               key={device.id}
               className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md"

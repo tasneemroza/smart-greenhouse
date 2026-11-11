@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   createSensor,
@@ -20,6 +20,7 @@ type SensorState = {
 
 export default function SensorList() {
   const [sensors, setSensors] = useState<SensorDto[]>([]);
+  const [showAllSensors, setShowAllSensors] = useState(false);
   const [sensorStates, setSensorStates] = useState<
     Record<string, SensorState>
   >({});
@@ -27,6 +28,26 @@ export default function SensorList() {
   const [readingId, setReadingId] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [error, setError] = useState("");
+
+  const visibleSensors = useMemo(() => {
+    if (showAllSensors) {
+      return sensors;
+    }
+
+    const seenTypes = new Set<string>();
+
+    return sensors.filter((sensor) => {
+      // Keep one sensor of each type in the normal view.
+
+      // Keep one unassigned sensor per type.
+      if (seenTypes.has(sensor.device_type)) {
+        return false;
+      }
+
+      seenTypes.add(sensor.device_type);
+      return true;
+    });
+  }, [sensors, showAllSensors]);
 
   async function loadSensors() {
     try {
@@ -278,6 +299,29 @@ export default function SensorList() {
         </button>
       </div>
 
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#DDE5DC] bg-white p-4">
+        <div>
+          <p className="font-semibold text-[#293B32]">
+            Sensor Overview
+          </p>
+          <p className="text-sm text-[#6F7C73]">
+            Showing {visibleSensors.length} of {sensors.length} sensors
+          </p>
+        </div>
+
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-[#315747]">
+          <input
+            type="checkbox"
+            checked={showAllSensors}
+            onChange={(event) =>
+              setShowAllSensors(event.target.checked)
+            }
+            className="h-4 w-4 accent-[#315747]"
+          />
+          Show all sensors
+        </label>
+      </div>
+
       {error && (
         <div
           role="alert"
@@ -291,15 +335,15 @@ export default function SensorList() {
         <p className="py-4 text-sm text-[#6F7C73]">Loading sensors...</p>
       )}
 
-      {!loading && !error && sensors.length === 0 && (
+      {!loading && !error && visibleSensors.length === 0 && (
         <p className="rounded-xl border border-dashed border-[#DDE5DC] bg-[#F6F7F2] p-6 text-sm text-[#6F7C73]">
           No sensors found.
         </p>
       )}
 
-      {!loading && sensors.length > 0 && (
+      {!loading && visibleSensors.length > 0 && (
         <div className="grid gap-4 md:grid-cols-2">
-          {sensors.map((sensor) => {
+          {visibleSensors.map((sensor) => {
             const state = sensorStates[sensor.id];
 
             return (
