@@ -363,3 +363,26 @@ export async function fetchOverview(
 }
 
 
+
+export type ActuatorExecutionDto = {
+  id: string;
+  device_id: string;
+  success: boolean;
+  policy_applied: string[];
+  message: string | null;
+  created_at: string;
+};
+
+export async function fetchActuatorExecutions(
+  limit = 20,
+): Promise<ActuatorExecutionDto[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/actuators/executions?limit=${limit}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load actuator execution log");
+  }
+
+  return response.json();
+}

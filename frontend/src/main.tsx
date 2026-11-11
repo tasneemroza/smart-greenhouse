@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+﻿import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
@@ -8,6 +8,7 @@ import DeviceList from "./components/devices/DeviceList";
 import LocationConfigWizard from "./components/config/LocationConfigWizard";
 import AutomationPanel from "./features/automation/AutomationPanel";
 import OverviewPanel from "./features/overview/OverviewPanel";
+import ExecutionLog from "./features/actuators/ExecutionLog";
 
 function Dashboard() {
   return (
@@ -67,6 +68,10 @@ function Dashboard() {
             <LocationConfigWizard />
           </section>
 
+          <section id="executions" className="scroll-mt-6 rounded-2xl border border-[#DDE5DC] bg-white p-4 shadow-[0_3px_16px_rgba(41,59,50,0.04)] sm:p-6">
+            <ExecutionLog />
+          </section>
+
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <section id="automation" className="rounded-2xl border border-[#DDE5DC] bg-white p-5 shadow-[0_3px_16px_rgba(41,59,50,0.04)]">
               <AutomationPanel />
@@ -87,7 +92,7 @@ function Dashboard() {
         </main>
 
         <footer className="mt-8 border-t border-[#DDE5DC] py-5 text-center text-xs text-[#6F7C73]">
-           Smart Greenhouse · Monitoring system
+           Smart Greenhouse Â· Monitoring system
         </footer>
       </div>
     </div>
@@ -110,3 +115,4 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </StrictMode>,
 );
+
