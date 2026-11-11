@@ -1,11 +1,16 @@
+
 # Environment files
 .env
+.env.*
+!.env.example
 backend/.env
+frontend/.env
 
 # Python
 backend/.venv/
 __pycache__/
 *.pyc
+backend/src/*.egg-info/
 
 # Node
 node_modules/
@@ -14,9 +19,31 @@ frontend/dist/
 
 # IDE
 .vscode/
+.idea/
 
 # OS
 .DS_Store
 Thumbs.db
 
-backend/src/*.egg-info/
+# Backup files
+*.bak
+*.backup
+*.backup-*
+*.phase9-backup
+*.phase8-backup
+*.before-*
+frontend/theme3-backup/
+
+# Temporary PowerShell scripts
+fix-device-icons*.ps1
+apply-demo3.ps1
+
+# Local database backups and exports
+greenhouse-before-*.sql
+greenhouse-before-*.dump
+sensor-readings-before-*.csv
+
+# Temporary Phase 9 testing and recovery files
+backend/phase9_original_state.json
+backend/phase9_restore_state.py
+backend/phase9_runtime_test.py

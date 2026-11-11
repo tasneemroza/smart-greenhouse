@@ -23,7 +23,7 @@ type ZoneOption = {
 const actuatorStateStyles: Record<ActuatorState, string> = {
   off: "bg-slate-100 text-slate-700",
   idle: "bg-slate-100 text-slate-700",
-  running: "bg-emerald-100 text-emerald-700",
+  running: "bg-[#D7E5E3] text-[#344A4F]",
   error: "bg-red-100 text-red-700",
   maintenance: "bg-amber-100 text-amber-700",
 };
@@ -223,12 +223,12 @@ export default function DeviceList() {
         onChange={setSelectedFamily}
       />
 
-      <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <div className="mb-6 rounded-2xl border border-[#D7E5E3] bg-white p-5 shadow-sm">
         <button
           type="button"
           onClick={handleProvision}
           disabled={provisioning}
-          className="rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-xl bg-[#344A4F] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#293D41] focus:outline-none focus:ring-2 focus:ring-[#344A4F] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {provisioning
             ? "Provisioning..."
@@ -236,24 +236,24 @@ export default function DeviceList() {
         </button>
       </div>
 
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#D7E5E3] bg-white p-4">
         <div>
-          <p className="font-semibold text-gray-900">
+          <p className="font-semibold text-[#293C40]">
             Device Overview
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-[#68797B]">
             Showing {visibleDevices.length} of {devices.length} devices
           </p>
         </div>
 
-        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700">
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-[#293C40]">
           <input
             type="checkbox"
             checked={showAllDevices}
             onChange={(event) =>
               setShowAllDevices(event.target.checked)
             }
-            className="h-4 w-4 accent-green-600"
+            className="h-4 w-4 accent-[#344A4F]"
           />
           Show all devices
         </label>
@@ -268,7 +268,7 @@ export default function DeviceList() {
       {loading && <p>Loading devices...</p>}
 
       {!loading && !error && visibleDevices.length === 0 && (
-        <p className="text-gray-500">No devices found.</p>
+        <p className="text-[#68797B]">No devices found.</p>
       )}
 
       {!loading && visibleDevices.length > 0 && (
@@ -276,14 +276,14 @@ export default function DeviceList() {
           {visibleDevices.map((device) => (
             <div
               key={device.id}
-              className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md"
+              className="group rounded-2xl border border-[#D7E5E3] bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#D7E5E3] hover:shadow-md"
             >
               <div className="mb-2 flex flex-wrap gap-2">
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold capitalize text-gray-700">
+                <span className="rounded-full bg-[#F6F8F7] px-3 py-1 text-xs font-semibold capitalize text-[#293C40]">
                   {device.role}
                 </span>
 
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold capitalize text-blue-700">
+                <span className="rounded-full bg-[#D7E5E3] px-3 py-1 text-xs font-semibold capitalize text-[#344A4F]">
                   {device.device_family}
                 </span>
                 {device.role === "actuator" && device.state && (
@@ -296,15 +296,15 @@ export default function DeviceList() {
                 )}
               </div>
 
-              <h3 className="text-lg font-bold text-gray-900">
+              <h3 className="text-lg font-bold text-[#293C40]">
                 {device.display_name}
               </h3>
 
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#68797B]">
                 Type: {device.device_type}
               </p>
 
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#68797B]">
                 Protocol:{" "}
                 {String(
                   device.default_config.protocol ??
@@ -315,7 +315,7 @@ export default function DeviceList() {
               <div className="mt-4">
                 <label
                   htmlFor={`zone-${device.id}`}
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-[#293C40]"
                 >
                   Zone
                 </label>
@@ -333,7 +333,7 @@ export default function DeviceList() {
                     loadingZones ||
                     assigningDeviceId === device.id
                   }
-                  className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100 disabled:cursor-not-allowed disabled:bg-gray-100"
+                  className="w-full rounded-xl border border-[#D7E5E3] bg-white px-3 py-2.5 text-sm text-[#293C40] outline-none transition focus:border-[#344A4F] focus:ring-2 focus:ring-[#E7EFE6] disabled:cursor-not-allowed disabled:bg-[#F6F8F7]"
                 >
                   <option value="">Unassigned</option>
 
@@ -347,12 +347,12 @@ export default function DeviceList() {
                   ))}
                 </select>
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-[#68797B]">
                   Current: {getCurrentZoneLabel(device)}
                 </p>
 
                 {assigningDeviceId === device.id && (
-                  <p className="mt-1 text-xs text-green-600">
+                  <p className="mt-1 text-xs text-[#344A4F]">
                     Saving zone assignment...
                   </p>
                 )}

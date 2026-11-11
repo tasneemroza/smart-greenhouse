@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   fetchActuatorExecutions,
   type ActuatorExecutionDto,
@@ -33,10 +33,10 @@ export default function ExecutionLog() {
     <div>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-[#293B32]">
+          <h2 className="text-xl font-bold tracking-tight text-[#293C40]">
             Actuator Execution Log
           </h2>
-          <p className="mt-1 text-sm text-[#6F7C73]">
+          <p className="mt-1 text-sm text-[#68797B]">
             Recent actuator commands and applied execution policies.
           </p>
         </div>
@@ -45,7 +45,7 @@ export default function ExecutionLog() {
           type="button"
           onClick={() => void loadExecutions()}
           disabled={loading}
-          className="rounded-full bg-[#315747] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#264637] disabled:opacity-50"
+          className="rounded-full bg-[#344A4F] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#293D41] disabled:opacity-50"
         >
           {loading ? "Loading..." : "Refresh"}
         </button>
@@ -58,22 +58,22 @@ export default function ExecutionLog() {
       )}
 
       {loading && executions.length === 0 ? (
-        <p className="py-8 text-center text-sm text-[#6F7C73]">
+        <p className="py-8 text-center text-sm text-[#68797B]">
           Loading execution history...
         </p>
       ) : !loading && !error && executions.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-[#DDE5DC] bg-[#F6F7F2] px-4 py-10 text-center">
-          <p className="font-medium text-[#315747]">
+        <div className="rounded-xl border border-dashed border-[#D7E5E3] bg-[#F6F8F7] px-4 py-10 text-center">
+          <p className="font-medium text-[#344A4F]">
             No actuator executions yet
           </p>
-          <p className="mt-2 text-sm text-[#6F7C73]">
+          <p className="mt-2 text-sm text-[#68797B]">
             Execution records will appear here after an actuator command is attempted.
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#DDE5DC]">
+        <div className="overflow-x-auto rounded-xl border border-[#D7E5E3]">
           <table className="min-w-full text-left text-sm">
-            <thead className="bg-[#E7EFE6] text-[#315747]">
+            <thead className="bg-[#D7E5E3] text-[#344A4F]">
               <tr>
                 <th scope="col" className="px-4 py-3 font-semibold">Time</th>
                 <th scope="col" className="px-4 py-3 font-semibold">Device ID</th>
@@ -85,12 +85,12 @@ export default function ExecutionLog() {
 
             <tbody className="divide-y divide-[#DDE5DC]">
               {executions.map((execution) => (
-                <tr key={execution.id} className="hover:bg-[#F6F7F2]">
-                  <td className="whitespace-nowrap px-4 py-3 text-[#52675A]">
+                <tr key={execution.id} className="hover:bg-[#F6F8F7]">
+                  <td className="whitespace-nowrap px-4 py-3 text-[#52666A]">
                     {new Date(execution.created_at).toLocaleString()}
                   </td>
 
-                  <td className="px-4 py-3 font-mono text-xs text-[#52675A]">
+                  <td className="px-4 py-3 font-mono text-xs text-[#52666A]">
                     {execution.device_id}
                   </td>
 
@@ -106,11 +106,11 @@ export default function ExecutionLog() {
                     </span>
                   </td>
 
-                  <td className="px-4 py-3 text-[#52675A]">
+                  <td className="px-4 py-3 text-[#52666A]">
                     {execution.policy_applied.join(", ") || "None"}
                   </td>
 
-                  <td className="px-4 py-3 text-[#52675A]">
+                  <td className="px-4 py-3 text-[#52666A]">
                     {execution.message || "-"}
                   </td>
                 </tr>
@@ -120,7 +120,7 @@ export default function ExecutionLog() {
         </div>
       )}
 
-      <p className="mt-3 text-xs text-[#6F7C73]">
+      <p className="mt-3 text-xs text-[#68797B]">
         Showing up to 20 most recent execution attempts. Use Refresh to load new records.
       </p>
     </div>

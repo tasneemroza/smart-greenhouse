@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   evaluateAutomation,
   fetchLocations,
@@ -68,14 +68,14 @@ export default function AutomationPanel() {
 
   return (
     <div>
-      <h2 className="text-base font-semibold text-[#315747]">Automation</h2>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-[#6F7C73]">
+      <h2 className="text-base font-semibold text-[#344A4F]">Automation</h2>
+      <p className="mt-2 max-w-2xl text-sm leading-6 text-[#68797B]">
         Choose a location, save its strategy, and evaluate zone recommendations.
       </p>
 
       <div className="mt-6 space-y-5">
         <div>
-          <label htmlFor="automation-location" className="mb-2 block text-sm font-bold text-[#293B32]">Location</label>
+          <label htmlFor="automation-location" className="mb-2 block text-sm font-bold text-[#293C40]">Location</label>
           <select
             id="automation-location"
             value={locationId}
@@ -86,7 +86,7 @@ export default function AutomationPanel() {
               setError("");
             }}
             disabled={locations.length === 0 || busy}
-            className="w-full rounded-xl border border-[#DDE5DC] bg-white px-4 py-3 text-sm text-[#293B32] shadow-sm outline-none transition focus:border-[#71977A] focus:ring-4 focus:ring-[#E7EFE6] disabled:cursor-not-allowed disabled:bg-gray-50"
+            className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-[#293C40] shadow-sm outline-none transition focus:border-[#71977A] focus:ring-4 focus:ring-[#E7EFE6] disabled:cursor-not-allowed disabled:bg-gray-50"
           >
             {locations.length === 0 && <option value="">No locations available</option>}
             {locations.map((location) => (
@@ -96,12 +96,12 @@ export default function AutomationPanel() {
         </div>
 
         <div>
-          <label htmlFor="automation-strategy" className="mb-2 block text-sm font-bold text-[#293B32]">Strategy</label>
+          <label htmlFor="automation-strategy" className="mb-2 block text-sm font-bold text-[#293C40]">Strategy</label>
           <select
             id="automation-strategy"
             value={strategy}
             onChange={(event) => setStrategy(event.target.value as AutomationStrategyKey)}
-            className="w-full rounded-xl border border-[#DDE5DC] bg-white px-4 py-3 text-sm text-[#293B32] shadow-sm outline-none transition focus:border-[#71977A] focus:ring-4 focus:ring-[#E7EFE6] disabled:cursor-not-allowed disabled:bg-gray-50"
+            className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-[#293C40] shadow-sm outline-none transition focus:border-[#71977A] focus:ring-4 focus:ring-[#E7EFE6] disabled:cursor-not-allowed disabled:bg-gray-50"
           >
             <option value="conservative">Conservative</option>
             <option value="aggressive">Aggressive</option>
@@ -113,7 +113,7 @@ export default function AutomationPanel() {
             type="button"
             onClick={saveStrategy}
             disabled={!locationId || busy}
-            className="rounded-xl bg-[#315747] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#254536] focus:outline-none focus:ring-2 focus:ring-[#71977A] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl bg-[#344A4F] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#254536] focus:outline-none focus:ring-2 focus:ring-[#71977A] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {busy ? "Please wait..." : "Save strategy"}
           </button>
@@ -121,32 +121,32 @@ export default function AutomationPanel() {
             type="button"
             onClick={evaluateStrategy}
             disabled={!locationId || busy}
-            className="rounded-xl border border-[#C9D8CA] bg-[#F4F7F1] px-5 py-3 text-base font-bold text-[#315747] transition-colors hover:bg-[#E7EFE6] focus:outline-none focus:ring-2 focus:ring-[#71977A] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl border border-[#C9D8CA] bg-[#F4F7F1] px-5 py-3 text-base font-bold text-[#344A4F] transition-colors hover:bg-[#D7E5E3] focus:outline-none focus:ring-2 focus:ring-[#71977A] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Evaluate
           </button>
         </div>
 
-        {message && <p role="status" className="rounded-xl border border-[#C9D8CA] bg-[#F4F7F1] px-4 py-3 text-sm font-medium text-[#315747]">{message}</p>}
+        {message && <p role="status" className="rounded-xl border border-[#C9D8CA] bg-[#F4F7F1] px-4 py-3 text-sm font-medium text-[#344A4F]">{message}</p>}
         {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</p>}
 
         {result && (
-          <div className="space-y-4 border-t border-[#DDE5DC] pt-5">
-            <p className="text-base font-bold text-[#315747]">Results · {result.strategy_key}</p>
+          <div className="space-y-4 border-t border-[#D7E5E3] pt-5">
+            <p className="text-base font-bold text-[#344A4F]">Results · {result.strategy_key}</p>
             {result.recommendations.length === 0 && (
-              <p className="text-sm text-[#6F7C73]">No zones found for this location.</p>
+              <p className="text-sm text-[#68797B]">No zones found for this location.</p>
             )}
             {result.recommendations.map((item) => (
-              <div key={item.zone_id} className="rounded-2xl border border-[#DDE5DC] bg-[#FAFBF8] p-4 transition-colors hover:border-[#C9D8CA]">
+              <div key={item.zone_id} className="rounded-2xl border border-[#D7E5E3] bg-[#FAFBF8] p-4 transition-colors hover:border-[#C9D8CA]">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-bold text-[#293B32]">{item.zone_name}</p>
-                  <span className="rounded-full bg-[#E7EFE6] px-3 py-1 text-xs font-bold capitalize text-[#315747]">
+                  <p className="text-sm font-bold text-[#293C40]">{item.zone_name}</p>
+                  <span className="rounded-full bg-[#D7E5E3] px-3 py-1 text-xs font-bold capitalize text-[#344A4F]">
                     {item.action}
                   </span>
                 </div>
-                <p className="mt-2 text-sm leading-5 text-[#6F7C73]">{item.reason}</p>
+                <p className="mt-2 text-sm leading-5 text-[#68797B]">{item.reason}</p>
                 {item.intensity !== null && (
-                  <p className="mt-2 text-xs text-[#6F7C73]">Intensity: {item.intensity}</p>
+                  <p className="mt-2 text-xs text-[#68797B]">Intensity: {item.intensity}</p>
                 )}
               </div>
             ))}

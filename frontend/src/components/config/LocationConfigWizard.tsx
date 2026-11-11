@@ -525,11 +525,11 @@ function LocationConfigWizard() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-2xl font-bold tracking-tight text-gray-900">
+        <h3 className="text-2xl font-bold tracking-tight text-[#293C40]">
           Location Configuration
         </h3>
 
-        <p className="mt-2 text-sm leading-6 text-gray-500">
+        <p className="mt-2 text-sm leading-6 text-[#68797B]">
           Create and manage greenhouse locations and zones.
         </p>
       </div>
@@ -546,14 +546,14 @@ function LocationConfigWizard() {
         </div>
       )}
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="rounded-2xl border border-[#D7E5E3] bg-white p-5 shadow-sm sm:p-6">
         <h4 className="font-semibold text-gray-800">
           Saved locations
         </h4>
 
         <div className="mt-4 space-y-2">
           {locations.length === 0 ? (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#68797B]">
               No saved locations yet.
             </p>
           ) : (
@@ -563,7 +563,7 @@ function LocationConfigWizard() {
                 className={`flex items-center justify-between rounded-xl border p-3 transition-colors ${
                   selectedLocationId === location.id
                     ? "border-green-300 bg-green-50 shadow-sm"
-                    : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
+                    : "border-[#D7E5E3] bg-white hover:border-gray-300 hover:bg-[#F6F8F7]"
                 }`}
               >
                 <button
@@ -588,13 +588,13 @@ function LocationConfigWizard() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 bg-gray-50/80 p-5 shadow-sm sm:p-6">
+      <div className="rounded-2xl border border-[#D7E5E3] bg-[#F6F8F7]/80 p-5 shadow-sm sm:p-6">
         <h4 className="font-semibold text-gray-800">
           Create new location
         </h4>
 
         <div className="mt-4">
-          <label className="mb-2 block text-sm font-medium text-gray-700">
+          <label className="mb-2 block text-sm font-medium text-[#293C40]">
             Location name
           </label>
 
@@ -603,7 +603,7 @@ function LocationConfigWizard() {
             value={locationName}
             onChange={(event) => setLocationName(event.target.value)}
             placeholder="Lab Site A"
-            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+            className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
           />
         </div>
 
@@ -616,7 +616,7 @@ function LocationConfigWizard() {
             <button
               type="button"
               onClick={addZone}
-              className="rounded-xl bg-green-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="rounded-xl bg-[#344A4F] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#293D41] focus:outline-none focus:ring-2 focus:ring-[#344A4F] focus:ring-offset-2"
             >
               Add zone
             </button>
@@ -625,7 +625,7 @@ function LocationConfigWizard() {
           {zones.map((zone, index) => (
             <div
               key={index}
-              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6"
+              className="rounded-2xl border border-[#D7E5E3] bg-white p-5 shadow-sm sm:p-6"
             >
               <div className="mb-4 flex items-center justify-between">
                 <h5 className="font-medium text-gray-800">
@@ -645,7 +645,7 @@ function LocationConfigWizard() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     Zone name
                   </label>
 
@@ -656,12 +656,12 @@ function LocationConfigWizard() {
                       updateZone(index, "name", event.target.value)
                     }
                     placeholder="Bench 1"
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     Watering schedule
                   </label>
 
@@ -671,12 +671,12 @@ function LocationConfigWizard() {
                     onChange={(event) =>
                       updateZone(index, "schedule", event.target.value)
                     }
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     Low moisture threshold
                   </label>
 
@@ -693,12 +693,12 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     High moisture threshold
                   </label>
 
@@ -715,7 +715,7 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
               </div>
@@ -727,7 +727,7 @@ function LocationConfigWizard() {
           type="button"
           onClick={handleSubmit}
           disabled={loading}
-          className="mt-6 rounded-xl bg-green-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-6 rounded-xl bg-[#344A4F] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#293D41] focus:outline-none focus:ring-2 focus:ring-[#344A4F] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? "Saving..." : "Save configuration"}
         </button>
@@ -741,7 +741,7 @@ function LocationConfigWizard() {
                 {savedConfig.location.name}
               </h4>
 
-              <p className="mt-1 break-all text-xs text-gray-500">
+              <p className="mt-1 break-all text-xs text-[#68797B]">
                 Location ID: {savedConfig.location.id}
               </p>
             </div>
@@ -756,7 +756,7 @@ function LocationConfigWizard() {
                 setSuccess("");
               }}
               disabled={loading}
-              className="shrink-0 rounded-xl bg-green-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50"
+              className="shrink-0 rounded-xl bg-[#344A4F] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#293D41] focus:outline-none focus:ring-2 focus:ring-[#344A4F] focus:ring-offset-2 disabled:opacity-50"
             >
               {showAddZone ? "Cancel" : "Add zone"}
             </button>
@@ -770,7 +770,7 @@ function LocationConfigWizard() {
 
               <div className="mt-4 grid gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     Zone name
                   </label>
 
@@ -781,12 +781,12 @@ function LocationConfigWizard() {
                       updateNewZone("name", event.target.value)
                     }
                     placeholder="Zone 2"
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     Watering schedule
                   </label>
 
@@ -796,12 +796,12 @@ function LocationConfigWizard() {
                     onChange={(event) =>
                       updateNewZone("schedule", event.target.value)
                     }
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     Low moisture threshold
                   </label>
 
@@ -817,12 +817,12 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block text-sm font-medium text-[#293C40]">
                     High moisture threshold
                   </label>
 
@@ -838,7 +838,7 @@ function LocationConfigWizard() {
                         event.target.value,
                       )
                     }
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-green-500 focus:ring-4 focus:ring-green-100"
+                    className="w-full rounded-xl border border-[#D7E5E3] bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-[#344A4F] focus:ring-4 focus:ring-[#E7EFE6]"
                   />
                 </div>
               </div>
@@ -847,7 +847,7 @@ function LocationConfigWizard() {
                 type="button"
                 onClick={addZoneToSavedLocation}
                 disabled={loading}
-                className="mt-4 rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 disabled:opacity-50"
+                className="mt-4 rounded-lg bg-[#344A4F] px-4 py-2 text-sm font-medium text-white hover:bg-[#293D41] disabled:opacity-50"
               >
                 {loading ? "Adding..." : "Save zone"}
               </button>
@@ -858,13 +858,13 @@ function LocationConfigWizard() {
             {savedConfig.zones.map((zone) => (
               <div
                 key={zone.id}
-                className="rounded-xl border border-gray-200 bg-white p-4 transition-colors hover:border-green-200"
+                className="rounded-xl border border-[#D7E5E3] bg-white p-4 transition-colors hover:border-green-200"
               >
                 {editingZoneId === zone.id && editingZone ? (
                   <>
                     <div className="grid gap-4 md:grid-cols-2">
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                        <label className="mb-2 block text-sm font-medium text-[#293C40]">
                           Zone name
                         </label>
 
@@ -877,12 +877,12 @@ function LocationConfigWizard() {
                               event.target.value,
                             )
                           }
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-green-500"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#344A4F]"
                         />
                       </div>
 
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                        <label className="mb-2 block text-sm font-medium text-[#293C40]">
                           Watering schedule
                         </label>
 
@@ -895,12 +895,12 @@ function LocationConfigWizard() {
                               event.target.value,
                             )
                           }
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-green-500"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#344A4F]"
                         />
                       </div>
 
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                        <label className="mb-2 block text-sm font-medium text-[#293C40]">
                           Low moisture threshold
                         </label>
 
@@ -916,12 +916,12 @@ function LocationConfigWizard() {
                               event.target.value,
                             )
                           }
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-green-500"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#344A4F]"
                         />
                       </div>
 
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                        <label className="mb-2 block text-sm font-medium text-[#293C40]">
                           High moisture threshold
                         </label>
 
@@ -937,7 +937,7 @@ function LocationConfigWizard() {
                               event.target.value,
                             )
                           }
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-green-500"
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-[#344A4F]"
                         />
                       </div>
                     </div>
@@ -947,7 +947,7 @@ function LocationConfigWizard() {
                         type="button"
                         onClick={saveEditedZone}
                         disabled={loading}
-                        className="rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 disabled:opacity-50"
+                        className="rounded-lg bg-[#344A4F] px-4 py-2 text-sm font-medium text-white hover:bg-[#293D41] disabled:opacity-50"
                       >
                         {loading ? "Saving..." : "Save changes"}
                       </button>
@@ -956,7 +956,7 @@ function LocationConfigWizard() {
                         type="button"
                         onClick={cancelEditingZone}
                         disabled={loading}
-                        className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                        className="rounded-xl border border-[#D7E5E3] bg-white px-4 py-2.5 text-sm font-semibold text-[#293C40] transition-colors hover:bg-[#F6F8F7] disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -970,13 +970,13 @@ function LocationConfigWizard() {
                           {zone.name}
                         </p>
 
-                        <p className="mt-1 text-sm text-gray-600">
+                        <p className="mt-1 text-sm text-[#68797B]">
                           Threshold:{" "}
-                          {zone.moisture_threshold_low} –{" "}
+                          {zone.moisture_threshold_low} ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“{" "}
                           {zone.moisture_threshold_high}
                         </p>
 
-                        <p className="mt-1 text-sm text-gray-600">
+                        <p className="mt-1 text-sm text-[#68797B]">
                           Watering:{" "}
                           {String(
                             zone.schedule.watering ?? "Not set",

@@ -1,4 +1,5 @@
-﻿import type { DeviceFamily } from "../../services/api";
+import { Monitor, Cpu } from "lucide-react";
+import type { DeviceFamily } from "../../services/api";
 
 type DeviceFamilySwitcherProps = {
   selectedFamily: DeviceFamily;
@@ -9,21 +10,28 @@ export default function DeviceFamilySwitcher({
   selectedFamily,
   onChange,
 }: DeviceFamilySwitcherProps) {
+  const baseStyle =
+    "rounded-xl border px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#344A4F] focus:ring-offset-2";
+
+  const selectedStyle =
+    "border-[#344A4F] bg-[#344A4F] text-white shadow-md";
+
+  const unselectedStyle =
+    "border-[#D8C5B8] bg-[#F3E6DC] text-[#344A4F] hover:border-[#B98C72] hover:bg-[#EAD5C6]";
+
   return (
-    <div className="mb-6 inline-flex flex-wrap gap-2 rounded-2xl border border-gray-200 bg-gray-50 p-2 shadow-sm">
+    <div className="mb-6 inline-flex flex-wrap gap-2 rounded-2xl border border-[#D8C5B8] bg-[#F6F8F7] p-2 shadow-sm">
       <button
         type="button"
         onClick={() => onChange("simulation")}
         aria-pressed={selectedFamily === "simulation"}
-        className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
+        className={`${baseStyle} ${
           selectedFamily === "simulation"
-            ? "bg-blue-600 text-white shadow-md"
-            : "bg-transparent text-gray-600 hover:bg-white hover:text-gray-900"
+            ? selectedStyle
+            : unselectedStyle
         }`}
       >
-        <span className="mr-2" aria-hidden="true">
-          ◉
-        </span>
+        <Monitor size={18} aria-hidden="true" className="mr-2 inline-block align-middle" />
         Simulation
       </button>
 
@@ -31,15 +39,13 @@ export default function DeviceFamilySwitcher({
         type="button"
         onClick={() => onChange("edge")}
         aria-pressed={selectedFamily === "edge"}
-        className={`rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
+        className={`${baseStyle} ${
           selectedFamily === "edge"
-            ? "bg-blue-600 text-white shadow-md"
-            : "bg-transparent text-gray-600 hover:bg-white hover:text-gray-900"
+            ? selectedStyle
+            : unselectedStyle
         }`}
       >
-        <span className="mr-2" aria-hidden="true">
-          ◈
-        </span>
+        <Cpu size={18} aria-hidden="true" className="mr-2 inline-block align-middle" />
         Edge Hardware
       </button>
     </div>

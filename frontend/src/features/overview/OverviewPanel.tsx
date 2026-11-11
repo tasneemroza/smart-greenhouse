@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchLocations, fetchOverview } from "../../services/api";
 import type { LocationDto, LocationOverviewDto } from "../../services/api";
 
@@ -63,20 +63,20 @@ export default function OverviewPanel() {
   }, [locationId]);
 
   if (loadingLocations) {
-    return <p className="text-sm text-[#6F7C73]">Loading locations...</p>;
+    return <p className="text-sm text-[#68797B]">Loading locations...</p>;
   }
 
   return (
     <div className="space-y-5">
       {locations.length > 0 && (
         <label className="block">
-          <span className="mb-1 block text-sm font-medium text-[#52675A]">
+          <span className="mb-1 block text-sm font-medium text-[#52666A]">
             Location
           </span>
           <select
             value={locationId}
             onChange={(event) => setLocationId(event.target.value)}
-            className="w-full rounded-xl border border-[#DDE5DC] bg-white px-3 py-2 text-sm text-[#293B32] outline-none focus:border-[#315747]"
+            className="w-full rounded-xl border border-[#D7E5E3] bg-white px-3 py-2 text-sm text-[#293C40] outline-none focus:border-[#344A4F]"
           >
             {locations.map((location) => (
               <option key={location.id} value={location.id}>
@@ -94,46 +94,46 @@ export default function OverviewPanel() {
       )}
 
       {!error && locations.length === 0 && (
-        <p className="text-sm text-[#6F7C73]">
+        <p className="text-sm text-[#68797B]">
           No locations found. Create a location in Configuration first.
         </p>
       )}
 
       {loadingOverview && (
-        <p className="text-sm text-[#6F7C73]">Loading greenhouse overview...</p>
+        <p className="text-sm text-[#68797B]">Loading greenhouse overview...</p>
       )}
 
       {overview && !loadingOverview && (
         <div className="space-y-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#6F7C73]">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#68797B]">
               Selected greenhouse
             </p>
-            <h3 className="mt-1 text-lg font-bold text-[#315747]">
+            <h3 className="mt-1 text-lg font-bold text-[#344A4F]">
               {overview.location.name}
             </h3>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-[#E7EFE6] p-3">
-              <p className="text-sm text-[#52675A]">Sensors</p>
-              <p className="mt-1 text-2xl font-bold text-[#315747]">
+            <div className="rounded-xl bg-[#D7E5E3] p-3">
+              <p className="text-sm text-[#52666A]">Sensors</p>
+              <p className="mt-1 text-2xl font-bold text-[#344A4F]">
                 {overview.device_counts.sensor}
               </p>
             </div>
-            <div className="rounded-xl bg-[#E7EFE6] p-3">
-              <p className="text-sm text-[#52675A]">Actuators</p>
-              <p className="mt-1 text-2xl font-bold text-[#315747]">
+            <div className="rounded-xl bg-[#D7E5E3] p-3">
+              <p className="text-sm text-[#52666A]">Actuators</p>
+              <p className="mt-1 text-2xl font-bold text-[#344A4F]">
                 {overview.device_counts.actuator}
               </p>
             </div>
           </div>
 
           <div>
-            <h4 className="font-semibold text-[#293B32]">Zones and devices</h4>
+            <h4 className="font-semibold text-[#293C40]">Zones and devices</h4>
 
             {overview.zones.length === 0 ? (
-              <p className="mt-2 text-sm text-[#6F7C73]">
+              <p className="mt-2 text-sm text-[#68797B]">
                 No zones configured for this location.
               </p>
             ) : (
@@ -141,15 +141,15 @@ export default function OverviewPanel() {
                 {overview.zones.map((zone) => (
                   <section
                     key={zone.id}
-                    className="rounded-xl border border-[#DDE5DC] p-3"
+                    className="rounded-xl border border-[#D7E5E3] p-3"
                   >
-                    <h5 className="font-semibold text-[#315747]">{zone.name}</h5>
-                    <p className="mt-1 text-xs text-[#6F7C73]">
+                    <h5 className="font-semibold text-[#344A4F]">{zone.name}</h5>
+                    <p className="mt-1 text-xs text-[#68797B]">
                       Moisture thresholds: {zone.moisture_threshold_low}–{zone.moisture_threshold_high}
                     </p>
 
                     {zone.devices.length === 0 ? (
-                      <p className="mt-2 text-sm text-[#6F7C73]">No assigned devices.</p>
+                      <p className="mt-2 text-sm text-[#68797B]">No assigned devices.</p>
                     ) : (
                       <ul className="mt-3 space-y-3">
                         {zone.devices.map((device) => {
@@ -159,14 +159,14 @@ export default function OverviewPanel() {
 
                           return (
                             <li key={device.id} className="border-t border-[#EDF0EA] pt-2">
-                              <p className="text-sm font-medium text-[#293B32]">
+                              <p className="text-sm font-medium text-[#293C40]">
                                 {device.display_name}
                               </p>
-                              <p className="text-xs text-[#6F7C73]">
+                              <p className="text-xs text-[#68797B]">
                                 {device.device_type} · {device.role}
                               </p>
                               {device.role === "sensor" && (
-                                <div className="mt-1 text-sm text-[#52675A]">
+                                <div className="mt-1 text-sm text-[#52666A]">
                                   {reading ? (
                                     <>
                                       <p>
@@ -196,26 +196,26 @@ export default function OverviewPanel() {
             )}
           </div>
 
-          <div className="rounded-xl border border-[#DDE5DC] p-3">
-            <h4 className="font-semibold text-[#315747]">Automation strategy</h4>
-            <p className="mt-1 text-sm text-[#52675A]">
+          <div className="rounded-xl border border-[#D7E5E3] p-3">
+            <h4 className="font-semibold text-[#344A4F]">Automation strategy</h4>
+            <p className="mt-1 text-sm text-[#52666A]">
               {overview.strategy_key ?? "No strategy configured"}
             </p>
 
-            <h5 className="mt-3 text-sm font-semibold text-[#293B32]">
+            <h5 className="mt-3 text-sm font-semibold text-[#293C40]">
               Latest evaluation
             </h5>
             {overview.last_recommendation ? (
               <>
-                <p className="mt-1 text-sm text-[#293B32]">
+                <p className="mt-1 text-sm text-[#293C40]">
                   {overview.last_recommendation.action}
                 </p>
-                <p className="mt-1 text-sm text-[#6F7C73]">
+                <p className="mt-1 text-sm text-[#68797B]">
                   {overview.last_recommendation.reason}
                 </p>
               </>
             ) : (
-              <p className="mt-1 text-sm text-[#6F7C73]">
+              <p className="mt-1 text-sm text-[#68797B]">
                 No recommendation available.
               </p>
             )}
