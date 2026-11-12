@@ -290,3 +290,52 @@ Index(
     ActuatorExecutionLogRow.device_id,
     ActuatorExecutionLogRow.created_at.desc(),
 )
+
+
+class CommandLogRow(Base):
+    __tablename__ = "command_log"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        server_default=text("gen_random_uuid()"),
+    )
+
+    device_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("devices.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    command_type: Mapped[str] = mapped_column(
+        String(64),
+        nullable=False,
+    )
+
+    payload: Mapped[dict] = mapped_column(
+        JSONB,
+        nullable=False,
+        server_default=text("'{}'::jsonb"),
+    )
+
+    status: Mapped[str] = mapped_column(
+        String(16),
+        nullable=False,
+    )
+
+    error_message: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=text("now()"),
+    )
+
+
+Index(
+    "ix_command_log_created_at",
+    CommandLogRow.created_at.desc(),
+)

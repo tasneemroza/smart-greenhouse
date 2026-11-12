@@ -1,4 +1,4 @@
-﻿from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Callable
 from uuid import UUID
 
@@ -29,20 +29,22 @@ class MaxRunTimeActuatorDecorator(ActuatorPort):
         command: str,
         payload: dict[str, Any] | None = None,
     ) -> None:
-        state = self.state_repository.get_state(device_id)
+        # Stopping must remain possible even after the runtime limit.
+        if command not in {"stop_pump", "stop_grow_light"}:
+            state = self.state_repository.get_state(device_id)
 
-        if state is not None and state.state == "running":
-            updated_at = state.updated_at
+            if state is not None and state.state == "running":
+                updated_at = state.updated_at
 
-            if updated_at.tzinfo is None:
-                updated_at = updated_at.replace(
-                    tzinfo=timezone.utc
-                )
+                if updated_at.tzinfo is None:
+                    updated_at = updated_at.replace(
+                        tzinfo=timezone.utc
+                    )
 
-            elapsed = self.clock() - updated_at
+                elapsed = self.clock() - updated_at
 
-            if elapsed >= timedelta(minutes=30):
-                raise MaxRunTimeExceededError()
+                if elapsed >= timedelta(minutes=30):
+                    raise MaxRunTimeExceededError()
 
         self.inner.apply(
             device_id=device_id,

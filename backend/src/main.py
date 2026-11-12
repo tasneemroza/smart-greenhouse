@@ -1,4 +1,5 @@
-﻿import asyncio
+from src.interfaces.api.commands import router as commands_router
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -83,6 +84,7 @@ app.include_router(devices_router)
 app.include_router(actuators_router)
 app.include_router(locations_router)
 app.include_router(automation_router)
+app.include_router(commands_router)
 
 
 @app.get("/scalar", include_in_schema=False)
@@ -91,4 +93,6 @@ def scalar():
         openapi_url=app.openapi_url,
         title="Smart Greenhouse API",
     )
+
+
 

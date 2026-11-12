@@ -25,6 +25,7 @@ import LocationConfigWizard from "./components/config/LocationConfigWizard";
 import AutomationPanel from "./features/automation/AutomationPanel";
 import OverviewPanel from "./features/overview/OverviewPanel";
 import ExecutionLog from "./features/actuators/ExecutionLog";
+import CommandPanel from "./components/commands/CommandPanel";
 
 const navigation = [
   { label: "Overview", path: "/overview", icon: LayoutDashboard },
@@ -169,9 +170,7 @@ function DashboardLayout() {
 
             <Route path="/controls" element={
               <Page title="Controls">
-                <p className="text-sm text-[#68797B]">
-                  Greenhouse controls will be available here.
-                </p>
+                <CommandPanel />
               </Page>
             } />
 
@@ -210,3 +209,5 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </StrictMode>,
 );
+
+

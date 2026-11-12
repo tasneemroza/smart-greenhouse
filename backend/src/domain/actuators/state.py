@@ -1,4 +1,4 @@
-﻿from enum import Enum
+from enum import Enum
 
 
 class ActuatorState(str, Enum):
@@ -69,7 +69,15 @@ class ActuatorContext:
             ActuatorState.ERROR: f"reset_{device_name}",
         }
 
-        return [commands[self._state]]
+        allowed = [commands[self._state]]
+
+        if (
+            device_name == "grow_light"
+            and self._state == ActuatorState.RUNNING
+        ):
+            allowed.append("set_light_level")
+
+        return allowed
 
     def transition(self, target: str) -> str:
         try:

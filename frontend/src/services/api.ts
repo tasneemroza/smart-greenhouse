@@ -386,3 +386,65 @@ export async function fetchActuatorExecutions(
 
   return response.json();
 }
+
+export type CommandStatus = "success" | "failed" | "rejected";
+
+export type CommandRequestDto = {
+  command_type: string;
+  device_id: string;
+  payload: Record<string, unknown>;
+};
+
+export type CommandResultDto = {
+  id: string;
+  command_type: string;
+  device_id: string;
+  payload: Record<string, unknown>;
+  status: CommandStatus;
+  error_message: string | null;
+  created_at: string;
+};
+
+export async function executeCommand(
+  command: CommandRequestDto,
+): Promise<CommandResultDto> {
+  const response = await fetch(`${API_BASE_URL}/api/commands`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(command),
+  });
+
+  const result = await response.json();
+
+  // A rejected command returns HTTP 409 but includes an audit result.
+  if (response.status === 409 && result.status === "rejected") {
+    return result as CommandResultDto;
+  }
+
+  if (!response.ok) {
+    const message =
+      typeof result.detail === "string"
+        ? result.detail
+        : "Failed to execute command";
+
+    throw new Error(message);
+  }
+
+  return result as CommandResultDto;
+}
+
+export async function fetchCommandHistory(
+  limit = 20,
+): Promise<CommandResultDto[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/commands?limit=${limit}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to load command history");
+  }
+
+  return response.json();
+}
